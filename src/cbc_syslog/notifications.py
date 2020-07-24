@@ -1,6 +1,8 @@
 import requests
 import time
 import logging
+import re
+import json
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -157,7 +159,7 @@ def parse_response_leef_psc(response, source, get_unicode_string):
 
     return log_messages
 
-def parse_response_cef_psc(response, source, get_unicode_string):
+def parse_response_cef_psc(response, source, get_unicode_string, urll, apikey, apiid):
     version = 'CEF:0'
     vendor = 'CarbonBlack'
     product = 'CbDefense_Syslog_Connector'
@@ -206,6 +208,24 @@ def parse_response_cef_psc(response, source, get_unicode_string):
                     extension += ' duser=' + user
                 else:
                     extension += ' duser=' + user_name
+
+                todoElEvento = gather_notification_context(urll, tid, apikey, apiid, True, proxies=None)
+                informacion = ''
+                for notas in todoElEvento['events']:
+                    informacion += notas['longDescription']
+                    informacion += ' \r\n'
+
+                informacion = re.sub('<.*?>', '', informacion)
+                extension += ' cs1=' + informacion
+                extension += ' cs1Label=longDescription'
+
+                detalle=''
+                for item2 in note['threatInfo']['indicators']:
+                    detalle += item2['applicationName']+' -> '+item2['indicatorName']
+                    detalle += ' \r\n'
+                detalle = re.sub('<.*?>', '', detalle)
+                extension += ' cs2=' + detalle
+                extension += ' cs2Label=indicators'
 
                 extension += ' dvc=' + device_ip
                 extension += ' cs3Label="Link"'

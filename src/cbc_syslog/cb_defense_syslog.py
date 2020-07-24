@@ -344,7 +344,7 @@ def parse_notifications(server, notifications_response, audit_response):
         if config.get('general', 'output_format').lower() == 'json':
             notifications_log = n.parse_response_json_psc(notifications_response, source, get_unicode_string)
         elif config.get('general', 'output_format').lower() == 'cef':
-            notifications_log = n.parse_response_cef_psc(notifications_response, source, get_unicode_string)
+            notifications_log = n.parse_response_cef_psc(notifications_response, source, get_unicode_string, server.get('server_url'), server.get('api_key'),server.get('api_connector_id'))
         else:
             notifications_log = n.parse_response_leef_psc(notifications_response, source, get_unicode_string)
 
@@ -495,4 +495,3 @@ if __name__ == "__main__":
     except Exception as e:
         logger.error(e, exc_info=True)
         sys.exit(-1)
-
