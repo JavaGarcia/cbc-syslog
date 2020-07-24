@@ -1,4 +1,4 @@
-### This is a fork of carbonblack/cbc-syslog, whit new features.
+### This is a fork of carbonblack/cbc-syslog, with new features.
 
 * Long description about the alert on cef format field CS1
 * Attack techniques used by observed processes on cef format field CS2
